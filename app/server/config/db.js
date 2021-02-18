@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
-const connectDB = async () => {
+exports.connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI, {
       useUnifiedTopology: true,
@@ -14,4 +14,7 @@ const connectDB = async () => {
   }
 };
 
-export default connectDB;
+exports.connectToPG= async()=>{
+  
+}
+

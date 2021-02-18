@@ -1,14 +1,14 @@
-import asyncHandler from "express-async-handler";
-import ProductUpload from "../models/productUpload.js";
-import Product from "../models/productModel.js";
+const asyncHandler = require ("express-async-handler");
+const ProductUpload = require ("../models/productUpload.js");
+const Product = require ("../models/productModel.js");
 
-import cloudinary from "../utils/cloudinary.js";
+const cloudinary = require ("../utils/cloudinary.js");
 
 // @Description add product
 // @routes Post/api/product/upload
 // @access Public
 
-const addProduct = asyncHandler(async (req, res) => {
+ exports.addProduct = asyncHandler(async (req, res) => {
   const {
     name,
     category,
@@ -48,7 +48,7 @@ const addProduct = asyncHandler(async (req, res) => {
 // @routes Post/api/product/get
 // @access Public
 
-const getAllProducts = asyncHandler(async (req, res) => {
+exports.getAllProducts = asyncHandler(async (req, res) => {
   const getProducts = await Product.find({});
 
   if (getProducts) {
@@ -63,7 +63,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
 // @routes Post/api/product/upload/:id
 // @access Public
 
-const getProductById = asyncHandler(async (req, res) => {
+exports.getProductById = asyncHandler(async (req, res) => {
   const findProduct = await Product.findById(req.params.id);
 
   if (findProduct) {
@@ -78,7 +78,7 @@ const getProductById = asyncHandler(async (req, res) => {
 // @routes Post/api/product/update
 // @access Public
 
-const updateProduct = asyncHandler(async (req, res) => {
+exports.updateProduct = asyncHandler(async (req, res) => {
   const {
     name,
     category,
@@ -124,7 +124,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @desc    Delete a product
 // @route   DELETE /api/product/delete/:id
 // @access  Private/Admin
-const deleteProduct = asyncHandler(async (req, res) => {
+exports.deleteProduct = asyncHandler(async (req, res) => {
   const products = await Product.findById(req.params.id);
 
   if (products) {
@@ -136,10 +136,3 @@ const deleteProduct = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
 });
-export {
-  addProduct,
-  updateProduct,
-  getProductById,
-  getAllProducts,
-  deleteProduct,
-};

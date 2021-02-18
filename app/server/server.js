@@ -1,14 +1,15 @@
-import express from "express";
-import dotenv from "dotenv";
-import "colors";
-import cors from "cors";
-import bodyParser from "body-parser";
-import connectDB from "./config/db.js";
-import userRoutes from "./routes/userRoute.js";
-import productRoutes from "./routes/productRoutes.js";
-import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
-
-const PORT = process.env.PORT || 5000;
+const express = require("express");
+const dotenv = require("dotenv");
+require("colors");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const winston = require("winston");
+const userRoutes = require("./routes/userRoute.js");
+const productRoutes = require("./routes/productRoutes.js");
+const { errorHandler, notFound } = require("./middleware/errorMiddleware.js");
+const { connectDB } = require("./config/db");
+const db = require("./config/database");
 
 const app = express();
 
@@ -58,7 +59,19 @@ app.use(errorHandler);
 
 // "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix ../client && npm run build --prefix ../client"
 
-app.listen(
-  PORT,
-  console.log(`Server is running on http://localhost:${PORT}`.yellow.bold)
-);
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+} else {
+  app.use(morgan("combined", { stream: winston.stream }));
+}
+
+db.authenticate()
+  .then(() => {
+    console.log("Postgres DB connection has been established successfully.");
+  })
+  .catch((error) => console.error("Unable to connect to the database:", error));
+
+const port = process.env.PORT || 8000;
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server is running on port ${port}`);
+});

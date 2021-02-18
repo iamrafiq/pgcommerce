@@ -1,12 +1,12 @@
-import asyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
-import generateToken from "../utils/generateToken.js";
+const asyncHandler = require ("express-async-handler");
+const User = require ("../models/userModel.js");
+const generateToken = require ("../utils/generateToken.js");
 
 // @Description Auth data
 // @routes Post/api/users/login
 // @access Public
 
-const authUser = asyncHandler(async (req, res) => {
+exports.authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   console.log(email, password);
@@ -30,7 +30,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
-const registerUser = asyncHandler(async (req, res) => {
+ exports.registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   console.log(name, email, password);
@@ -61,5 +61,3 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
-
-export { authUser, registerUser };
