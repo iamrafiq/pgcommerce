@@ -20,7 +20,7 @@ const clusterRoutes = require("./routes/cluster");
 const fileRoutes = require("./routes/file");
 const productRoutes = require("./routes/product");
 const admin = require('firebase-admin');
-var serviceAccount = require('./config/firebaseConfig.json');
+var serviceAccount = require('./mzecom-firebase-adminsdk-zqr9v-f237b7612d.json');
 
 const firebaseConfig = require('./config/firebaseConfig')
 
@@ -93,8 +93,7 @@ if (process.env.NODE_ENV === "development") {
 
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://DATA_BASE_URL.firebaseio.com"
+  credential: admin.credential.cert(serviceAccount)
 });
 
 

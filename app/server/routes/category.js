@@ -22,7 +22,7 @@ const {userByUUID} = require("../controllers/user")
 
 
 //private api
-router.post("/category/create/:userUUID", verifyToken, requireSignin, isAuth, isBlocked, isClerk, create, storeFiles, responce);
+ router.post("/category/create/", verifyToken, create, storeFiles, responce);
 router.put("/category/:categoryUUID/:userUUID", requireSignin, isAuth, isBlocked, isClerk, update, storeFiles, responce);
 router.put("/category/reactivate/:categoryUUID/:userUUID", requireSignin, isAuth, isBlocked, isAdmin, reactivate, responce);
 router.put("/category/translation/reactivate/:translationUUID/:userUUID", requireSignin, isAuth, isBlocked, isAdmin, reactivateTranslation, responce);

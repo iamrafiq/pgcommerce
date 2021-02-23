@@ -2,14 +2,10 @@ const { handleError } = require("./errorHandler");
 
 exports.success = (
   res,
-  code = 200,
-  message = "Executed successfully.",
-  results = {}
+  {code, ...results}=responce
 ) => {
   res.status(code).json({
-    success: true,
-    message,
-    results,
+    ...results
   });
 };
 
@@ -25,8 +21,7 @@ exports.failed = (res, message = "Execution failed.", error, statusCode = 400) =
 exports.responce = (req, res) => {
   const { responce } = req;
   if (responce.success) {
-    const { code, message, results } = responce;
-    this.success(res, code, message, results);
+    this.success(res, responce);
   }else{
     const { message, error } = responce;
     this.failed(res, message, error);

@@ -241,7 +241,11 @@ exports.productBySlug = async (req, res, next, slug) => {
         (error = { name: "not_found" })
       );
     } else {
-      req.product = product;
+      const translation = await db.ProductTranslation.findOne({
+        where: { productId: product.id },
+      });
+      const {id, deletedAt, ...rest} = product.dataValues
+      req.product = {...rest, translations:[translation]};
       next();
     }
   } catch (error) {
@@ -459,19 +463,19 @@ exports.list = async (req, res, next) => {
       [db.Sequelize.Op.gte]: priceFrom
     }
   }:{};
+
   let priceToOption = priceTo ? {
     unitPrice: {
       [db.Sequelize.Op.lte]: priceTo
     }
   }:{};
-
   try {
     var productIds;
     if (name){
       let productTrans = await db.ProductTranslation.findAll({
         where: {
           name: {
-            [db.Sequelize.Op.like]: `%${name}%`
+            [db.Sequelize.Op.iLike]: `%${name}%`
           }
         },
        
@@ -482,18 +486,28 @@ exports.list = async (req, res, next) => {
           productIds.push(productTrans[i].dataValues.productId);
       }
       }else{
-        productIds = undefined;
+        const results = [];
+        req.responce = {
+          success: true,
+          code: 200,
+          message: "Products not found",
+          count:0,
+          results,
+        };
+        next();
       }
        
     }else{
       productIds=undefined;
     }    
-  
-    let productNameOptions = productIds?{id: {[db.Sequelize.Op.in]: productIds}}:{};
 
-    const products = await db.Product.findAll({
+    let productNameOptions = productIds?{id: {[db.Sequelize.Op.in]: productIds}}:{};
+    const products = await db.Product.findAndCountAll({
       attributes: { exclude: ["delatedAt"] },
       where: db.Sequelize.and({ deletedAt: null }, categoryOptions, brandOptions, priceFromOption, priceToOption, productNameOptions),
+      order: [["updatedAt", "DESC"]],
+      limit: limit,
+      offset: offset,
       include: [
         {
           model: db.ProductTranslation,
@@ -503,22 +517,15 @@ exports.list = async (req, res, next) => {
         },
       ],
     });
-    if (products === null || products.length <= 0) {
-      req.responce = {
-        success: false,
-        message: "Products not found.",
-        error: { name: "not_found" },
-      };
-      next();
-    } else {
-      req.responce = {
-        success: true,
-        code: 200,
-        message: "All products retrieve successfully.",
-        results: products,
-      };
-      next();
-    }
+    const {count, rows: results} = products;
+    req.responce = {
+      success: true,
+      code: 200,
+      message: count === 0? "Products not found":"All products retrieve successfully.",
+      count,
+      results
+    };
+    next();
   } catch (error) {
     req.responce = {
       success: false,

@@ -21,11 +21,11 @@ module.exports = {
         allowNull: false,
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.JSON,
         allowNull: false,
       },
       featureDescription: {
-        type: Sequelize.STRING,
+        type: Sequelize.JSON,
         defaultValue:null
       },
       subText: {

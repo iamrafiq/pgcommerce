@@ -18,6 +18,7 @@ exports.signup = async (req, res, next) => {
     });
 
     const { id, hashedPassword, salt, password, ...rest } = user.dataValues;
+    
     const activeFiles = [];
     const { photo } = req.body;
     if (photo) {

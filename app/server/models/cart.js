@@ -39,9 +39,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       defaultValue: null,
     },
-    SKU: {
-      type: DataTypes.STRING,
-    },
     deletedAt: {
       type: DataTypes.DATE,
       defaultValue: null,

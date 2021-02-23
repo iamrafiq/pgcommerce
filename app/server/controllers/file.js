@@ -158,7 +158,9 @@ exports.list = async (req, res, next) => {
       limit: limit,
       offset: offset,
     });
-    if (files === null || files.length <= 0) {
+    const {count, rows: results} = files;
+
+    if (count == 0) {
       req.responce = {
         success: false,
         message: "Files not found.",
@@ -170,7 +172,8 @@ exports.list = async (req, res, next) => {
         success: true,
         code: 200,
         message: "All files retrieve successfully.",
-        results: files,
+        count,
+        results
       };
       next();
     }

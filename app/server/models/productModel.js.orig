@@ -66,30 +66,49 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    cloudinary_id: [
-      {
-        type: String,
-      },
-    ],
-    features: [
-      {
-        imageUrl1: {
+<<<<<<< HEAD
+<<<<<<< HEAD
+    specification: {
+      type: String,
+    },
+    imageUrl1: {
+      type: String,
+    },
+    cloudinary_id: {
+      type: String,
+    },
+    imageGroup: [
+=======
+=======
+>>>>>>> dev
+      cloudinary_id: [
+        {
           type: String,
         },
-        imageUrl2: {
-          type: String,
+      ],
+      features: [
+<<<<<<< HEAD
+>>>>>>> origin/rafiq
+=======
+>>>>>>> dev
+        {
+          imageUrl1: {
+            type: String,
+          },
+          imageUrl2: {
+            type: String,
+          },
+          imageUrl3: {
+            type: String,
+          },
+          imageUrl4: {
+            type: String,
+          },
+          imageUrl5: {
+            type: String,
+          },
         },
-        imageUrl3: {
-          type: String,
-        },
-        imageUrl4: {
-          type: String,
-        },
-        imageUrl5: {
-          type: String,
-        },
-      },
-    ],
+      ],
   },
   {
     timestamps: true,

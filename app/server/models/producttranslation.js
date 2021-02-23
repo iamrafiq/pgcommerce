@@ -37,22 +37,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: { msg: "Name must have a string value" },
+        notNull: { msg: "Name must have a value" },
         notEmpty: { msg: "Name must not be empty" },
       },
      
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       allowNull: false,
       validate: {
-        notNull: { msg: "Description must have a string value" },
+        notNull: { msg: "Description must have a value" },
         notEmpty: { msg: "Description must not be empty" },
       },
      
     },
     featureDescription: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       defaultValue:null
     },
     subText: {
