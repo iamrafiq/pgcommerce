@@ -20,6 +20,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      summary: {
+        type: Sequelize.TEXT,
+        defaultValue:null
+      },
       description: {
         type: Sequelize.JSON,
         allowNull: false,

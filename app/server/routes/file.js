@@ -3,6 +3,7 @@ const router = express.Router();
 const { files, storeFiles, send, list } = require("../controllers/file");
 const { responce } = require("../controllers/responce");
 const {
+  authenticate ,verifyToken,
   requireSignin,
   isAuth,
   isBlocked,

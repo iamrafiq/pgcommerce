@@ -12,6 +12,28 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4(),
       },
+      categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: "categories",
+            schema: "public",
+          },
+          key: "id",
+        },
+      },
+      brandId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: "brands",
+            schema: "public",
+          },
+          key: "id",
+        },
+      },
       categoryUUID: {
         type: Sequelize.UUID,
         defaultValue: null,
@@ -39,12 +61,16 @@ module.exports = {
         type: Sequelize.INTEGER,
         defaultValue: 0,
       },
-      unitPrice: {
+      rank: {
         type: Sequelize.INTEGER,
         defaultValue: 0,
       },
+      unitPrice: {
+        type: Sequelize.FLOAT,
+        defaultValue: 0,
+      },
       cropPrice: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         defaultValue: 0,
       },
       regularStock: {

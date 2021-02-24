@@ -12,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Category.hasMany(models.CategoryTranslation, {
         as: "translations",
-        sourceKey: "id",
+        foreignKey: "categoryId",
+      });
+      Category.hasMany(models.Product, {
+        as: "products",
         foreignKey: "categoryId",
       });
     }
@@ -40,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       parentUUID: {
         type: DataTypes.UUID,
+      },
+      productCount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
       },
       icon: {
         type: DataTypes.STRING,

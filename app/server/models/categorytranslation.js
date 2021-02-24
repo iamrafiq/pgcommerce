@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      CategoryTranslation.belongsTo(models.Category, { as: "category", foreignKey: 'categoryId' })
     }
     toJSON() {
       return { ...this.get(), id: undefined, categoryId: undefined, deletedAt:undefined  };

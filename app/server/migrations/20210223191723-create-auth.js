@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('clusters', {
+    await queryInterface.createTable('auths', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,27 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       uuid:{
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4()
-      },
-      slug: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
       },
-      icon: {
-        type: Sequelize.STRING
-      },
-      thumbnail: {
-        type: Sequelize.STRING
-      },
-      productCount: {
+      role: {
         type: Sequelize.INTEGER,
-        defaultValue: 0,
+        defaultValue:100
       },
-      order: {
+      block: {
         type: Sequelize.INTEGER,
-        defaultValue: 0,
+        defaultValue:0
       },
       createdAt: {
         allowNull: false,
@@ -46,6 +35,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('clusters');
+    await queryInterface.dropTable('auths');
   }
 };

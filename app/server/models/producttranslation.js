@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      ProductTranslation.belongsTo(models.Product, { as: "product", foreignKey: 'productId' })
     }
     toJSON() {
       return { ...this.get(), id: undefined, deletedAt:undefined, productId: undefined};
@@ -50,6 +51,10 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: { msg: "Description must not be empty" },
       },
      
+    },
+    summary: {
+      type: DataTypes.TEXT,
+      defaultValue:null
     },
     featureDescription: {
       type: DataTypes.JSON,

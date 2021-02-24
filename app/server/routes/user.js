@@ -6,9 +6,9 @@ const {
   read,
   update
 } = require("../controllers/user");
-const { requireSignin, isAuth, isAdmin, isSuperAdmin } = require("../controllers/auth");
+const { authenticate ,verifyToken, requireSignin, isAuth, isAdmin, isSuperAdmin } = require("../controllers/auth");
 
-router.get("/secret/:userId", requireSignin, isAuth, isAdmin, (req, res) => {
+router.get("/abc/:userId", requireSignin, isAuth, isAdmin, (req, res) => {
   res.json({
     user: req.profile,
   });

@@ -1,10 +1,90 @@
-const jwt = require("jsonwebtoken"); // to generate signin token
-const expressJwt = require("express-jwt"); // for authorization check
+
+const expressJwt = require("express-jwt");
 const db = require("../models/index");
 const { success, failed } = require("./responce");
 const nodemailer = require("nodemailer");
 
 var admin = require('firebase-admin');
+
+exports.verifyToken = (req, res, next) =>{
+  // req.firebaseUID = 'lCEgrUbsIZWaxIYBd5ksqw4VmED2u';
+  // next();
+  admin
+  .auth()
+  .verifyIdToken(req.header('authorization'))
+  .then((decodedToken) => {
+    req.firebaseUID = decodedToken.uid;
+    console.log("hhhhhhhhh", decodedToken.uid);
+    next();
+    
+  })
+  .catch((error) => {
+   failed(res, `Unauthorized user!!!!`, error);
+  });
+
+}
+
+exports.authenticate = async (req, res, next)=>{
+  try {
+    const {firebaseUID} = req;
+
+    console.log("log 0", firebaseUID)
+    const auth = await db.Auth.findOne({ where: { uuid: firebaseUID } });
+    console.log("log 1")
+    if (auth){
+      const { id, ...rest} = auth.dataValues;
+      req.responce = {
+        success: true,
+        code: 200,
+        message: "You logged-in successfully.",
+        results: {
+          ...rest,
+        },
+      };
+      next();
+    }else{
+      console.log("log 2")
+
+      const { role } = req.body;
+      
+      let auth = "";
+      if (role){
+        if (role < 0)
+        // protecting super admin
+        throw "Invalid input!!!!";
+        auth = await db.Auth.create({
+          uuid:firebaseUID, ...req.body,
+        });
+
+      }else{
+        console.log("log 3")
+
+        let role = 100; // setting user role buyer
+        auth = await db.Auth.create({
+          uuid:firebaseUID, role, ...req.body,
+        });
+      }
+      const { id, ...rest} = auth.dataValues;
+      req.responce = {
+        success: true,
+        code: 200,
+        message: "Your account has been successfully created.",
+        results: {
+          ...rest,
+        },
+      };
+      next();
+    }
+  } catch (error) {
+    req.responce = {
+      success: false,
+      message: "Unable to create your account please try again.",
+      error,
+    };
+    console.log("error", error)
+    next();
+  }
+}
 
 exports.signup = async (req, res, next) => {
   try {
@@ -199,23 +279,7 @@ exports.signout = (req, res) => {
   });
 };
 
-exports.verifyToken = (req, res, next) =>{
-  console.log("authorization: ",req.header('authorization'))
-  admin
-  .auth()
-  .verifyIdToken(req.header('authorization'))
-  .then((decodedToken) => {
-    const uid = decodedToken.uid;
-    console.log("decoded token", decodedToken);
-    next();
-    
-  })
-  .catch((error) => {
-    console.log("verifyToken:", error);
-    next();
-  });
 
-}
 exports.requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
   algorithms: ["HS256"],
@@ -237,7 +301,7 @@ exports.isAuth = (req, res, next) => {
 exports.isClerk = (req, res, next) => {
   if (req.user.role > 99) {
     return res.status(403).json({
-      error: "Admin resourse! Access denied",
+      error: "Clerk resourse! Access denied",
     });
   }
   next();

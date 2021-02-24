@@ -15,64 +15,37 @@ module.exports = (sequelize, DataTypes) => {
       return {
         ...this.get(),
         id: undefined,
-        hashedPassword: undefined,
-        salt: undefined,
-        password: undefined,
       };
     }
   }
   User.init(
     {
       uuid: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-      },
-      salt: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-      },
-      name: {
-        type: DataTypes.STRING(60),
+        type: DataTypes.STRING, // saving firebase uid
         allowNull: false,
-        validate: {
-          notNull: { msg: "Name must have a string value" },
-          notEmpty: { msg: "Name must not be empty" },
-          len: {
-            args: [4, 60],
-            msg: "Please provide a value within 4 to 60 for name.",
-          },
-        },
       },
-      userId: {
-        type: DataTypes.STRING(60),
-        allowNull: false,
-        unique: {
-          args: true,
-          msg: "Email address/Phone number already taken.",
-        },
-      },
-      userIdType: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0, // 0 - email address, 1 - mobile phone
-      },
-      hashedPassword: {
-        type: DataTypes.STRING(64),
-      },
-      password: {
-        type: DataTypes.VIRTUAL,
-        set: function (val) {
-          this.setDataValue("password", val);
-        },
-      },
-      oldPassword: {
-        type: DataTypes.VIRTUAL,
-        set: function (val) {
-          this.setDataValue("oldPassword", val);
-        },
-      },
+      // salt: {
+      //   type: DataTypes.UUID,
+      //   defaultValue: DataTypes.UUIDV4,
+      // },
+      // hashedPassword: {
+      //   type: DataTypes.STRING(64),
+      // },
+      // password: {
+      //   type: DataTypes.VIRTUAL,
+      //   set: function (val) {
+      //     this.setDataValue("password", val);
+      //   },
+      // },
+      // oldPassword: {
+      //   type: DataTypes.VIRTUAL,
+      //   set: function (val) {
+      //     this.setDataValue("oldPassword", val);
+      //   },
+      // },
       role: {
         type: DataTypes.INTEGER,
-        defaultValue: 100, // >99 for normal user
+        defaultValue: 100,  //role< 0 = super admin, role < 50 = admin,  role <99 = clerk/seller, role => 100 buyer
       },
       block: {
         type: DataTypes.INTEGER,
@@ -85,27 +58,27 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        beforeCreate(user, options) {
-          return cryptPassword(user.password, user.salt)
-            .then((results) => {
-              user.hashedPassword = results;
-            })
-            .catch((error) => {
-              if (error) console.log(error);
-            });
-        },
-        beforeBulkUpdate(user, options){
-          if (user.attributes.oldPassword){
-            const {password, salt}=user.attributes;
-            return cryptPassword(password, salt)
-            .then((results) => {
-              user.attributes.hashedPassword = results;
-            })
-            .catch((error) => {
-              if (error) console.log(error);
-            });
-          }
-        }
+        // beforeCreate(user, options) {
+        //   return cryptPassword(user.password, user.salt)
+        //     .then((results) => {
+        //       user.hashedPassword = results;
+        //     })
+        //     .catch((error) => {
+        //       if (error) console.log(error);
+        //     });
+        // },
+        // beforeBulkUpdate(user, options){
+        //   if (user.attributes.oldPassword){
+        //     const {password, salt}=user.attributes;
+        //     return cryptPassword(password, salt)
+        //     .then((results) => {
+        //       user.attributes.hashedPassword = results;
+        //     })
+        //     .catch((error) => {
+        //       if (error) console.log(error);
+        //     });
+        //   }
+        // }
       },
       sequelize,
       tableName: "users",

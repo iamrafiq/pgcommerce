@@ -13,18 +13,42 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Product.hasMany(models.ProductTranslation, {
         as: "translations",
-        sourceKey: "id",
         foreignKey: "productId",
       });
+      Product.belongsTo(models.Category, { as: "category", foreignKey: 'categoryId' })
+      Product.belongsTo(models.Brand, { as: "brand", foreignKey: 'brandId' })
+
     }
     toJSON() {
-      return { ...this.get(), id: undefined, deletedAt: undefined};
+      return { ...this.get(), id: undefined, deletedAt: undefined, categoryId:undefined, brandId:undefined, rank: undefined};
     }
   };
   Product.init({
     uuid: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
+    },
+    categoryId:  {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: {
+          tableName: "categories",
+          schema: "public",
+        },
+        key: "id",
+      },
+    },
+    brandId:  {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: {
+          tableName: "brands",
+          schema: "public",
+        },
+        key: "id",
+      },
     },
     categoryUUID: {
       type: DataTypes.UUID,
@@ -61,11 +85,15 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0,
     },
     unitPrice: {
+      type: DataTypes.FLOAT,
+      defaultValue: 0,
+    },
+    rank: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
     cropPrice: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       defaultValue: 0,
     },
     regularStock: {

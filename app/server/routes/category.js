@@ -17,20 +17,20 @@ const {
 } = require("../controllers/category");
 const {storeFiles} = require("../controllers/file")
 const {responce} = require("../controllers/responce")
-const { verifyToken, requireSignin, isAuth, isBlocked, isAdmin, isSuperAdmin, isClerk} = require('../controllers/auth');
+const { authenticate ,verifyToken, requireSignin, isAuth, isBlocked, isAdmin, isSuperAdmin, isClerk} = require('../controllers/auth');
 const {userByUUID} = require("../controllers/user")
 
 
 //private api
- router.post("/category/create/", verifyToken, create, storeFiles, responce);
-router.put("/category/:categoryUUID/:userUUID", requireSignin, isAuth, isBlocked, isClerk, update, storeFiles, responce);
-router.put("/category/reactivate/:categoryUUID/:userUUID", requireSignin, isAuth, isBlocked, isAdmin, reactivate, responce);
-router.put("/category/translation/reactivate/:translationUUID/:userUUID", requireSignin, isAuth, isBlocked, isAdmin, reactivateTranslation, responce);
+router.post("/category/create/",verifyToken, authenticate, userByUUID, create, storeFiles, responce);
+router.put("/category/:categoryUUID/",verifyToken, authenticate, userByUUID, update, storeFiles, responce);
+router.put("/category/reactivate/:categoryUUID/",verifyToken, authenticate, userByUUID, reactivate, responce);
+router.put("/category/translation/reactivate/:translationUUID/",verifyToken, authenticate, userByUUID, reactivateTranslation, responce);
 
-router.delete("/category/soft/:categoryUUID/:userUUID",  requireSignin, isAuth, isBlocked, isAdmin, softRemove, responce);
-router.delete("/category/hard/:categoryUUID/:userUUID",  requireSignin, isAuth, isBlocked, isSuperAdmin, hardRemove, responce);
-router.delete("/category/translation/hard/:translationUUID/:userUUID", requireSignin, isAuth, isBlocked, isSuperAdmin, hardRemoveTranslation, responce);
-router.get("/categories/:userUUID", requireSignin, isAuth, isBlocked, isClerk, listWithAllTranslation, responce);
+router.delete("/category/soft/:categoryUUID/", verifyToken, authenticate, userByUUID, softRemove, responce);
+router.delete("/category/hard/:categoryUUID/", verifyToken, authenticate, userByUUID, hardRemove, responce);
+router.delete("/category/translation/hard/:translationUUID/",verifyToken, authenticate, userByUUID, hardRemoveTranslation, responce);
+router.get("/categories/:userUUID",verifyToken, authenticate, userByUUID, listWithAllTranslation, responce);
 
 //public api
 router.get("/public/category/:categoryUUID", read);
@@ -41,6 +41,5 @@ router.get("/public/categories/", list, responce);
 router.param("slug", categoryBySlug);
 router.param("categoryUUID", categoryByUUID);
 router.param("translationUUID", translationByUUID);
-router.param("userUUID", userByUUID);
 
 module.exports = router;

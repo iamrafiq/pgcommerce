@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      ClusterTranslation.belongsTo(models.Cluster, { as: "cluster", foreignKey: 'clusterId' })
+
     }
     toJSON() {
       return { ...this.get(), id: undefined, deletedAt:undefined,  clusterId: undefined };

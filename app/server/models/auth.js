@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Cart extends Model {
+  class Auth extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,32 +11,26 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Cart.hasMany(models.CartItem, {
-        as: "cartitems",
-        foreignKey: "cartId",
-      });
     }
     toJSON() {
-      return { ...this.get(), id: undefined, deletedAt:undefined };
+      return {
+        ...this.get(),
+        id: undefined,
+      };
     }
-  
-    
   };
-  Cart.init({
+  Auth.init({
     uuid: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.STRING, // saving firebase uid
+      allowNull: false,
     },
-    userUUID: {
-      type: DataTypes.UUID,
-    },
-    active: {
+    role: {
       type: DataTypes.INTEGER,
-      defaultValue: 1,
+      defaultValue: 100,  //role< 0 = super admin, role < 50 = admin,  role <99 = clerk/seller, role => 100 buyer
     },
-    expireOn: {
-      type: DataTypes.DATE,
-      defaultValue: null,
+    block: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0, // 0 unblocked, 1 blocked
     },
     deletedAt: {
       type: DataTypes.DATE,
@@ -44,8 +38,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    tableName: "carts",
-    modelName: 'Cart',
+    tableName: "auths",
+    modelName: 'Auth',
   });
-  return Cart;
+  return Auth;
 };

@@ -53,7 +53,7 @@ app.get("/", (req, res) => {
 app.use("/api/users", depricatedUserRoutes);
 app.use("/api/product", depricatedProductRoutes);
 
-app.use("/api", authRoutes);
+ app.use("/api", authRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", brandRoutes);
 app.use("/api", clusterRoutes);

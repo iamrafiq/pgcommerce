@@ -3,11 +3,14 @@ const { success, failed } = require("./responce");
 
 exports.create = async (req, res, next) => {
   console.log(req.body)
+  const {categoryId, brandId} = req.body;
   const t = await db.sequelize.transaction();
   try {
     const product = await db.Product.create(
       {
         ...req.body,
+        categoryId,
+        brandId
       },
       { transaction: t }
     );
@@ -490,7 +493,7 @@ exports.list = async (req, res, next) => {
         req.responce = {
           success: true,
           code: 200,
-          message: "Products not found",
+          message: "Products not foundffff",
           count:0,
           results,
         };
@@ -504,17 +507,34 @@ exports.list = async (req, res, next) => {
     let productNameOptions = productIds?{id: {[db.Sequelize.Op.in]: productIds}}:{};
     const products = await db.Product.findAndCountAll({
       attributes: { exclude: ["delatedAt"] },
-      where: db.Sequelize.and({ deletedAt: null }, categoryOptions, brandOptions, priceFromOption, priceToOption, productNameOptions),
+       where: db.Sequelize.and({ deletedAt: null }, categoryOptions, brandOptions, priceFromOption, priceToOption, productNameOptions),
       order: [["updatedAt", "DESC"]],
       limit: limit,
       offset: offset,
       include: [
         {
           model: db.ProductTranslation,
+          attributes:[ 'name', 'summary', 'subText'],
           as: "translations",
-          // where: { code: "en-US" }, //{code: "en-US"}, {isDefault: true}
           where: db.Sequelize.and({ code: "en-US" }, { deletedAt: null }),
         },
+        {model: db.Category,
+          attributes:['uuid', 'slug'],
+
+          as: "category", include: [{
+            model: db.CategoryTranslation,
+            attributes:[ 'name'],
+            as: "translations",
+            where: db.Sequelize.and({ code: "en-US" }, { deletedAt: null }),
+          }]},
+        {model: db.Brand,
+          attributes:['uuid', 'slug'],
+          as: "brand", include: [{
+            model: db.BrandTranslation,
+            attributes:[ 'name'],
+            as: "translations",
+            where: db.Sequelize.and({ code: "en-US" }, { deletedAt: null }),
+          }]}
       ],
     });
     const {count, rows: results} = products;
@@ -529,7 +549,7 @@ exports.list = async (req, res, next) => {
   } catch (error) {
     req.responce = {
       success: false,
-      message: "Products not found.",
+      message: "Products not found.hhhh",
       error,
     };
     next();

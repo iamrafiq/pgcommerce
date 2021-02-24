@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      BrandTranslation.belongsTo(models.Brand, { as: "brand", foreignKey: 'brandId' })
+
     }
     toJSON() {
       return { ...this.get(), id: undefined, deletedAt:undefined, brandId: undefined };

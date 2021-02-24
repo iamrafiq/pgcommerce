@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Brand.hasMany(models.BrandTranslation, {
         as: "translations",
-        sourceKey: "id",
+        foreignKey: "brandId",
+      });
+      Brand.hasMany(models.Product, {
+        as: "products",
         foreignKey: "brandId",
       });
     }
@@ -44,6 +47,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       order: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      productCount: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },

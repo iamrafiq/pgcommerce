@@ -9,29 +9,29 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       uuid:{
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4()
-      },
-      salt:{
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4()
-      },
-      name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      userId: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      userIdType: {
-        type: Sequelize.INTEGER,
-        defaultValue:0
-      },
-      hashedPassword: {
-        type: Sequelize.STRING,
-      },
+      // salt:{
+      //   type: Sequelize.UUID,
+      //   defaultValue: Sequelize.UUIDV4()
+      // },
+      // name: {
+      //   type: Sequelize.STRING,
+      //   allowNull: false,
+      // },
+      // userId: {
+      //   type: Sequelize.STRING,
+      //   allowNull: false,
+      //   unique: true,
+      // },
+      // userIdType: {
+      //   type: Sequelize.INTEGER,
+      //   defaultValue:0
+      // },
+      // hashedPassword: {
+      //   type: Sequelize.STRING,
+      // },
       role: {
         type: Sequelize.INTEGER,
         defaultValue:100

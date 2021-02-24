@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      CartItem.belongsTo(models.Cart, { as: "cart", foreignKey: 'cartId' })
+
     }
     toJSON() {
       return { ...this.get(), id: undefined, deletedAt:undefined, cartId: undefined };

@@ -52,7 +52,7 @@ exports.create = async (req, res, next) => {
       code: 200,
       message: "Category created successfully.",
       results: {
-        ...rest,
+        ...category.dataValues,
         translations: [...translationsArray],
       },
     };
@@ -448,10 +448,44 @@ exports.hardRemoveTranslation = async (req, res, next) => {
     next();
   }
 };
-// const category = await db.sequelize.query(
-//   "SELECT * FROM categoryTranslations where code = ?",
-//   { replacements: ["en-US"], type: QueryTypes.SELECT }
-// );
+
+// exports.lists = async (req, res, next) => {
+//   try {
+//     const categories = await db.CategoryTranslation.findAll({
+//       attributes: { exclude: ["delatedAt"] },
+//       // order: [["order", "ASC"]],
+//       where: {
+//         deletedAt: null,
+//       },
+//       include: {model: db.Category,
+//         as: "category",}
+//     });
+//     if (categories === null || categories.length <= 0) {
+//       req.responce = {
+//         success: false,
+//         message: "Categories not found.",
+//         error: { name: "not_found" },
+//       };
+//       next();
+//     } else {
+//       req.responce = {
+//         success: true,
+//         code: 200,
+//         message: "All categories retrieve successfully.",
+//         results: categories,
+
+//       };
+//       next();
+//     }
+//   } catch (error) {
+//     req.responce = {
+//       success: false,
+//       message: "Categories not found.",
+//       error,
+//     };
+//     next();
+//   }
+// };
 
 exports.list = async (req, res, next) => {
   try {
@@ -479,12 +513,12 @@ exports.list = async (req, res, next) => {
       };
       next();
     } else {
-      // success(res, 200, "All categories retrieve successfully.", categories);
       req.responce = {
         success: true,
         code: 200,
         message: "All categories retrieve successfully.",
         results: categories,
+
       };
       next();
     }

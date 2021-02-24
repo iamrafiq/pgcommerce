@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Cluster.hasMany(models.ClusterTranslation, {
         as: "translations",
-        sourceKey: "id",
         foreignKey: "clusterId",
       });
     }
@@ -40,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     icon: {
       type: DataTypes.STRING,
+    },
+    productCount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
     thumbnail: {
       type: DataTypes.STRING,

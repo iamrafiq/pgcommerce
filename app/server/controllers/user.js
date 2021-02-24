@@ -1,9 +1,10 @@
 const {failed } = require("./responce");
 const db = require("../models/index");
 
-exports.userByUUID = async (req, res, next, uuid) => {
+exports.userByUUID = async (req, res, next) => {
+    const {firebaseUID: uuid} = req;
     try {
-      const user = await db.User.findOne({ where: { uuid } });
+      const user = await db.Auth.findOne({ where: { uuid } });
       if (user === null) {
         failed(
           res,

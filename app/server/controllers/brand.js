@@ -25,7 +25,6 @@ exports.create = async (req, res, next) => {
       }
     }
     await t.commit();
-    const { id, ...rest } = brand.dataValues;
     const activeFiles = [];
     const { icon, thumbnail } = req.body;
     if (icon) {
@@ -52,7 +51,7 @@ exports.create = async (req, res, next) => {
       code: 200,
       message: "Brand created successfully.",
       results: {
-        ...rest,
+        ...brand.dataValues,
         translations: [...translationsArray],
       },
     };
